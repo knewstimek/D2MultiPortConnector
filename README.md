@@ -62,3 +62,12 @@ You can change the D2GS listening port by patching `D2Net.dll` with a hex editor
 
 6. Launch `D2GS.exe` — it will now listen on your configured port
 
+## Running Multiple D2GS Instances
+
+On Windows, D2GS checks for an existing instance via `CreateMutex`. If you see "Seems another server is running", the mutex is blocking multiple instances.
+
+### Workarounds
+
+- **Wine (Linux)**: Use separate `WINEPREFIX` for each instance — mutex is isolated per prefix
+- **VM/Docker**: Run each D2GS in a separate virtual environment
+- **Patch D2GS**: NOP out the `CreateMutex` check in `D2GSCheckRunning`
