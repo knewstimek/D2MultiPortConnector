@@ -16,7 +16,39 @@ your-d2gs-server-2.com:4000
 4. Enter your bnetd server domain or IP in the `Server IP` field and click `Start`
 5. Change the game client gateway to `127.0.0.1` (required for proxy to work)
 
-> Note: Gateway modification feature is built into the program.
+> [!NOTE]
+> Gateway modification feature is built into the program.
+
+
+
+## Alternative: D2CS Custom Packet
+
+Instead of using `serverlists.txt`, you can implement a custom packet (`0x08`) in D2CS to send the server list directly.
+
+### Packet Structure
+
+| Offset | Size | Description |
+|--------|------|-------------|
+| 0 | 4 | Packet header |
+| 4 | 1 | Server count (n) |
+| 5 | 6 × n | Server entries |
+
+### Server Entry (6 bytes each)
+
+| Offset | Size | Description |
+|--------|------|-------------|
+| 0 | 4 | IP address (little-endian) |
+| 4 | 2 | Port (little-endian) |
+
+### Example
+
+3 servers:
+```
+[Header 4B][0x03][IP1 4B][Port1 2B][IP2 4B][Port2 2B][IP3 4B][Port3 2B]
+```
+
+> This requires D2CS source modification to send the custom packet.
+
 
 
 ## Server-side Port Configuration
@@ -40,3 +72,4 @@ You can change the D2GS listening port by patching `D2Net.dll` with a hex editor
 <img width="566" height="129" alt="image" src="https://github.com/user-attachments/assets/08ee326b-c633-410a-b751-870d1d6b2240" />
 
 6. Launch `D2GS.exe` — it will now listen on your configured port
+
