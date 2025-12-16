@@ -40,13 +40,6 @@ Instead of using `serverlists.txt`, you can implement a custom packet (`0x08`) i
 | 0 | 4 | IP address (little-endian) |
 | 4 | 2 | Port (little-endian) |
 
-### Example
-
-3 servers:
-```
-[Header 4B][0x03][IP1 4B][Port1 2B][IP2 4B][Port2 2B][IP3 4B][Port3 2B]
-```
-
 > This requires D2CS source modification to send the custom packet.
 
 
