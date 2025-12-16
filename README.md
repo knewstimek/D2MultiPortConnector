@@ -1,47 +1,40 @@
 # D2MultiPortConnector
 Client-side proxy that redirects Game.exe connections from fixed port 4000 to configurable ports, enabling d2gs instances on one machine
 
+## Background
+
+By default, D2CS only stores D2GS IP addresses in `gameservlist` and assumes a fixed port (4000). This makes it impossible to run multiple D2GS instances on a single machine with different ports.
+
+To support multiple D2GS instances on one host:
+1. D2CS must be modified to store IP:Port pairs in `gameservlist`
+2. The JoinGame (`0x04`) response packet must include the port information
+
+This project handles the modified JoinGame packet on the client side and redirects Game.exe to the correct port — without requiring any reverse engineering of the game client.
+
+## Current Limitations
+
+The current implementation does not fully handle the JoinGame (`0x04`) response with custom port information from D2CS.
+
+To enable dynamic port routing, modify `PatchJoinGameReply` in `PacketPatcher.cs` to parse the custom D2CS packet containing the D2GS port. Once implemented, the proxy will be able to route Game.exe connections to the correct D2GS instance based on the port specified by D2CS.
+
 ## Usage
 
 1. Place the built binary in the same folder as `Game.exe`
 2. Create `serverlists.txt` in the same folder
 3. Add server entries (one per line):
 ```
-your-d2gs-server-1.com:4000
 your-d2gs-server-1.com:4001
-your-d2gs-server-1.com:4002
-your-d2gs-server-2.com:4000
+your-d2gs-server-2.com:4002
 ```
+
+> [!NOTE]
+> Each IP can only map to one port. Use this for testing D2GS instances running on non-default ports.
 
 4. Enter your bnetd server domain or IP in the `Server IP` field and click `Start`
 5. Change the game client gateway to `127.0.0.1` (required for proxy to work)
 
 > [!NOTE]
 > Gateway modification feature is built into the program.
-
-
-
-## Alternative: D2CS Custom Packet
-
-Instead of using `serverlists.txt`, you can implement a custom packet (`0x08`) in D2CS to send the server list directly.
-
-### Packet Structure
-
-| Offset | Size | Description |
-|--------|------|-------------|
-| 0 | 4 | Packet header |
-| 4 | 1 | Server count (n) |
-| 5 | 6 × n | Server entries |
-
-### Server Entry (6 bytes each)
-
-| Offset | Size | Description |
-|--------|------|-------------|
-| 0 | 4 | IP address (little-endian) |
-| 4 | 2 | Port (little-endian) |
-
-> This requires D2CS source modification to send the custom packet.
-
 
 
 ## Server-side Port Configuration
