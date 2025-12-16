@@ -38,3 +38,5 @@ You can change the D2GS listening port by patching `D2Net.dll` with a hex editor
 5. Save the modified `D2Net.dll` and restart D2GS
 
 <img width="566" height="129" alt="image" src="https://github.com/user-attachments/assets/08ee326b-c633-410a-b751-870d1d6b2240" />
+
+6. Launch `D2GS.exe` — it will now listen on your configured port
