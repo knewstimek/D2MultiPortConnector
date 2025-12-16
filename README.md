@@ -17,7 +17,10 @@ The current implementation does not fully handle the JoinGame (`0x04`) response 
 
 To enable dynamic port routing, modify `PatchJoinGameReply` in `PacketPatcher.cs` to parse the custom D2CS packet containing the D2GS port. Once implemented, the proxy will be able to route Game.exe connections to the correct D2GS instance based on the port specified by D2CS.
 
-## Usage
+## Usage (without D2CS modification)
+
+> [!WARNING]
+> This is for testing only. Full functionality requires D2CS modification.
 
 1. Place the built binary in the same folder as `Game.exe`
 2. Create `serverlists.txt` in the same folder
